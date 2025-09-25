@@ -1,0 +1,58 @@
+nom: systemctl
+description: Contrôle les services systemd
+commande: systemctl start
+commande: systemctl stop
+commande: systemctl status
+exemple: sudo systemctl start apache2
+exemple: sudo systemctl enable ssh
+exemple: systemctl status networking
+tags: services, systemd, daemon
+
+nom: service
+description: Contrôle les services système (méthode traditionnelle)
+commande: service
+exemple: sudo service apache2 start
+exemple: sudo service ssh restart
+exemple: service --status-all
+tags: services, daemon
+
+nom: crontab
+description: Planifie des tâches automatiques
+commande: crontab -e
+commande: crontab -l
+exemple: crontab -e
+exemple: crontab -l
+exemple: crontab -r
+tags: planification, automatisation
+
+nom: mount
+description: Monte des systèmes de fichiers
+commande: mount
+commande: umount
+exemple: sudo mount /dev/sdb1 /mnt/usb
+exemple: sudo umount /mnt/usb
+exemple: mount | grep ext4
+tags: montage, système-fichiers
+
+nom: lsblk
+description: Affiche les périphériques de stockage en arbre
+commande: lsblk
+exemple: lsblk
+exemple: lsblk -f
+tags: stockage, périphériques
+
+nom: fdisk
+description: Gère les partitions de disque
+commande: fdisk -l
+commande: fdisk
+exemple: sudo fdisk -l
+exemple: sudo fdisk /dev/sdb
+tags: partitions, disque, avancé
+
+nom: uname
+description: Affiche les informations système
+commande: uname -a
+commande: uname -r
+exemple: uname -a
+exemple: uname -r
+tags: système, kernel, informations

@@ -1,0 +1,51 @@
+nom: chmod
+description: Modifie les permissions de fichiers et dossiers
+commande: chmod
+commande: chmod -R
+exemple: chmod 755 script.sh
+exemple: chmod u+x fichier.txt
+exemple: chmod -R 644 dossier/
+tags: permissions, droits
+
+nom: chown
+description: Change le propriétaire de fichiers et dossiers
+commande: chown
+commande: chown -R
+exemple: sudo chown user:group fichier.txt
+exemple: sudo chown -R www-data:www-data /var/www/
+exemple: chown user: fichier.txt
+tags: propriétaire, droits
+
+nom: chgrp
+description: Change le groupe propriétaire
+commande: chgrp
+commande: chgrp -R
+exemple: chgrp users fichier.txt
+exemple: chgrp -R staff dossier/
+tags: groupe, propriétaire
+
+nom: umask
+description: Définit les permissions par défaut pour les nouveaux fichiers
+commande: umask
+exemple: umask 022
+exemple: umask -S
+tags: permissions, défaut
+
+nom: su
+description: Change d'utilisateur
+commande: su
+commande: su -
+commande: su -c
+exemple: su - root
+exemple: su user
+exemple: su -c "command" user
+tags: utilisateur, switch
+
+nom: sudo
+description: Exécute des commandes en tant qu'autre utilisateur
+commande: sudo
+commande: sudo -u
+exemple: sudo apt update
+exemple: sudo -u www-data whoami
+exemple: sudo -i
+tags: privilèges, administrateur
