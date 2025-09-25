@@ -1,0 +1,45 @@
+nom: tar
+description: Archive et extrait des fichiers
+commande: tar -czf
+commande: tar -xzf
+commande: tar -tvf
+exemple: tar -czf archive.tar.gz dossier/
+exemple: tar -xzf archive.tar.gz
+exemple: tar -tvf archive.tar.gz
+tags: archive, compression
+
+nom: zip
+description: Crée des archives ZIP
+commande: zip
+commande: zip -r
+exemple: zip archive.zip fichier.txt
+exemple: zip -r archive.zip dossier/
+exemple: zip -9 archive.zip fichier.txt
+tags: compression, zip
+
+nom: unzip
+description: Extrait des archives ZIP
+commande: unzip
+commande: unzip -l
+exemple: unzip archive.zip
+exemple: unzip -l archive.zip
+exemple: unzip archive.zip -d destination/
+tags: extraction, zip
+
+nom: gzip
+description: Compresse des fichiers individuels
+commande: gzip
+commande: gunzip
+exemple: gzip fichier.txt
+exemple: gunzip fichier.txt.gz
+exemple: gzip -9 fichier.txt
+tags: compression, gzip
+
+nom: 7z
+description: Utilitaire d'archivage haute compression
+commande: 7z a
+commande: 7z x
+exemple: 7z a archive.7z dossier/
+exemple: 7z x archive.7z
+exemple: 7z l archive.7z
+tags: compression, 7zip, haute-compression

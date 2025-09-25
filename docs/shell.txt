@@ -1,0 +1,50 @@
+nom: history
+description: Affiche l'historique des commandes
+commande: history
+exemple: history
+exemple: history | grep ssh
+exemple: !123
+tags: historique, commandes
+
+nom: alias
+description: Crée des raccourcis pour les commandes
+commande: alias
+exemple: alias ll='ls -la'
+exemple: alias grep='grep --color=auto'
+exemple: unalias ll
+tags: raccourcis, personnalisation
+
+nom: which
+description: Localise une commande
+commande: which
+exemple: which python
+exemple: which -a python
+tags: localisation, commandes
+
+nom: whereis
+description: Localise les fichiers binaires, sources et manuels
+commande: whereis
+exemple: whereis python
+exemple: whereis -b python
+tags: localisation, binaires
+
+nom: xargs
+description: Construit et exécute des commandes à partir de l'entrée standard
+commande: xargs
+exemple: find . -name "*.txt" | xargs grep "motif"
+exemple: echo "file1 file2" | xargs rm
+tags: pipeline, traitement
+
+nom: tee
+description: Écrit vers un fichier et l'affichage standard
+commande: tee
+exemple: echo "test" | tee fichier.txt
+exemple: ls -la | tee -a log.txt
+tags: redirection, fichiers
+
+nom: watch
+description: Exécute une commande périodiquement
+commande: watch
+exemple: watch -n 2 df -h
+exemple: watch 'ps aux | grep apache'
+tags: monitoring, périodique

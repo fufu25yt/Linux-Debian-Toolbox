@@ -1,0 +1,330 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2025-01-25",
+    "author": "Votre Nom"
+  },
+  "categories": {
+    "debutant": {
+      "title": "Débutant",
+      "description": "Commandes essentielles pour commencer avec Linux Debian",
+      "icon": "fas fa-seedling",
+      "order": 1
+    },
+    "fichiers": {
+      "title": "Gestion Fichiers",
+      "description": "Commandes pour manipuler fichiers et répertoires",
+      "icon": "fas fa-folder",
+      "order": 2
+    },
+    "processus": {
+      "title": "Gestion des Processus",
+      "description": "Surveillance et contrôle des processus système",
+      "icon": "fas fa-cogs",
+      "order": 3
+    },
+    "reseau": {
+      "title": "Gestion Réseau",
+      "description": "Commandes pour diagnostiquer et configurer le réseau",
+      "icon": "fas fa-network-wired",
+      "order": 4
+    },
+    "permissions": {
+      "title": "Permissions",
+      "description": "Gestion des droits et permissions",
+      "icon": "fas fa-shield-alt",
+      "order": 5
+    },
+    "paquets": {
+      "title": "Gestion Paquets",
+      "description": "Installation et gestion des paquets Debian",
+      "icon": "fas fa-box",
+      "order": 6
+    },
+    "archivage": {
+      "title": "Archivage",
+      "description": "Compression et archivage de fichiers",
+      "icon": "fas fa-archive",
+      "order": 7
+    },
+    "monitoring": {
+      "title": "Monitoring",
+      "description": "Surveillance système et performance",
+      "icon": "fas fa-chart-line",
+      "order": 8
+    },
+    "shell": {
+      "title": "Shell Avancé",
+      "description": "Commandes et techniques shell avancées",
+      "icon": "fas fa-terminal",
+      "order": 9
+    },
+    "systeme": {
+      "title": "Administration",
+      "description": "Administration système avancée",
+      "icon": "fas fa-server",
+      "order": 10
+    }
+  },
+  "commands": {
+    "debutant": [
+      {
+        "nom": "ls",
+        "description": "Liste les fichiers et dossiers du répertoire courant",
+        "commandes": ["ls", "ls -la", "ls -lh", "ls --color=auto"],
+        "exemples": [
+          "ls -la",
+          "ls -lh /home",
+          "ls --color=auto",
+          "ls -lt"
+        ],
+        "tags": ["navigation", "fichiers", "essentiel"],
+        "niveau": "debutant",
+        "options": {
+          "-l": "Format long avec détails",
+          "-a": "Affiche tous les fichiers (y compris cachés)",
+          "-h": "Tailles lisibles par l'homme",
+          "-t": "Trie par date de modification"
+        }
+      },
+      {
+        "nom": "cd",
+        "description": "Change de répertoire",
+        "commandes": ["cd", "cd /path", "cd ..", "cd ~"],
+        "exemples": [
+          "cd /home/user",
+          "cd ..",
+          "cd ~",
+          "cd -"
+        ],
+        "tags": ["navigation", "essentiel"],
+        "niveau": "debutant",
+        "notes": "cd - revient au répertoire précédent"
+      },
+      {
+        "nom": "pwd",
+        "description": "Affiche le chemin du répertoire courant",
+        "commandes": ["pwd", "pwd -P"],
+        "exemples": [
+          "pwd",
+          "pwd -P"
+        ],
+        "tags": ["navigation", "localisation"],
+        "niveau": "debutant"
+      },
+      {
+        "nom": "mkdir",
+        "description": "Crée un ou plusieurs répertoires",
+        "commandes": ["mkdir", "mkdir -p", "mkdir -m"],
+        "exemples": [
+          "mkdir nouveau_dossier",
+          "mkdir -p dossier/sous-dossier",
+          "mkdir -m 755 dossier_avec_permissions"
+        ],
+        "tags": ["création", "dossiers"],
+        "niveau": "debutant",
+        "options": {
+          "-p": "Crée les répertoires parents si nécessaire",
+          "-m": "Définit les permissions"
+        }
+      }
+    ],
+    "fichiers": [
+      {
+        "nom": "cp",
+        "description": "Copie fichiers et répertoires",
+        "commandes": ["cp", "cp -r", "cp -a", "cp -i"],
+        "exemples": [
+          "cp fichier.txt copie.txt",
+          "cp -r dossier/ dossier_copie/",
+          "cp -a source/ destination/",
+          "cp -i *.txt backup/"
+        ],
+        "tags": ["copie", "fichiers"],
+        "niveau": "intermediaire",
+        "options": {
+          "-r": "Copie récursive pour les répertoires",
+          "-a": "Archive (préserve tout)",
+          "-i": "Mode interactif (demande confirmation)"
+        }
+      },
+      {
+        "nom": "mv",
+        "description": "Déplace ou renomme fichiers et répertoires",
+        "commandes": ["mv", "mv -i", "mv -n"],
+        "exemples": [
+          "mv ancien.txt nouveau.txt",
+          "mv fichier.txt /autre/dossier/",
+          "mv *.txt documents/"
+        ],
+        "tags": ["déplacement", "renommage"],
+        "niveau": "intermediaire"
+      },
+      {
+        "nom": "rm",
+        "description": "Supprime fichiers et répertoires",
+        "commandes": ["rm", "rm -r", "rm -f", "rm -i"],
+        "exemples": [
+          "rm fichier.txt",
+          "rm -rf dossier/",
+          "rm -i *.log"
+        ],
+        "tags": ["suppression", "attention"],
+        "niveau": "intermediaire",
+        "warning": "Attention: rm -rf peut supprimer définitivement des données"
+      },
+      {
+        "nom": "find",
+        "description": "Recherche fichiers et répertoires selon différents critères",
+        "commandes": ["find", "find -name", "find -type", "find -size"],
+        "exemples": [
+          "find /home -name \"*.txt\"",
+          "find . -type f -size +100M",
+          "find /var -mtime -7",
+          "find . -name \"*.py\" -exec grep -l \"import\" {} \\;"
+        ],
+        "tags": ["recherche", "filtres"],
+        "niveau": "avance"
+      }
+    ],
+    "processus": [
+      {
+        "nom": "ps",
+        "description": "Affiche les processus en cours d'exécution",
+        "commandes": ["ps", "ps aux", "ps -ef", "ps --forest"],
+        "exemples": [
+          "ps aux",
+          "ps -ef | grep apache",
+          "ps --forest"
+        ],
+        "tags": ["processus", "monitoring"],
+        "niveau": "intermediaire"
+      },
+      {
+        "nom": "top",
+        "description": "Affichage dynamique des processus et de l'utilisation système",
+        "commandes": ["top", "top -u user", "top -p pid"],
+        "exemples": [
+          "top",
+          "top -u username",
+          "top -p 1234"
+        ],
+        "tags": ["temps-réel", "performance"],
+        "niveau": "intermediaire"
+      },
+      {
+        "nom": "htop",
+        "description": "Version améliorée de top avec interface colorée",
+        "commandes": ["htop", "htop -u user", "htop -d delay"],
+        "exemples": [
+          "htop",
+          "htop -u root",
+          "htop -d 10"
+        ],
+        "tags": ["interactif", "coloré"],
+        "niveau": "intermediaire",
+        "notes": "Nécessite d'être installé: apt install htop"
+      },
+      {
+        "nom": "kill",
+        "description": "Termine un processus par son PID",
+        "commandes": ["kill", "kill -9", "killall"],
+        "exemples": [
+          "kill 1234",
+          "kill -9 1234",
+          "killall firefox"
+        ],
+        "tags": ["terminer", "processus"],
+        "niveau": "intermediaire",
+        "options": {
+          "-9": "Force la terminaison (SIGKILL)",
+          "-15": "Terminaison propre (SIGTERM, défaut)"
+        }
+      }
+    ],
+    "reseau": [
+      {
+        "nom": "ping",
+        "description": "Teste la connectivité réseau vers une adresse",
+        "commandes": ["ping", "ping -c", "ping6"],
+        "exemples": [
+          "ping google.com",
+          "ping -c 4 192.168.1.1",
+          "ping6 ipv6.google.com"
+        ],
+        "tags": ["connectivité", "diagnostic"],
+        "niveau": "intermediaire"
+      },
+      {
+        "nom": "wget",
+        "description": "Télécharge des fichiers depuis internet",
+        "commandes": ["wget", "wget -O", "wget -r"],
+        "exemples": [
+          "wget https://example.com/file.txt",
+          "wget -O nouveau_nom.txt https://example.com/file.txt",
+          "wget -r --no-parent https://example.com/directory/"
+        ],
+        "tags": ["téléchargement", "internet"],
+        "niveau": "intermediaire"
+      },
+      {
+        "nom": "curl",
+        "description": "Outil polyvalent pour transférer des données",
+        "commandes": ["curl", "curl -O", "curl -L"],
+        "exemples": [
+          "curl https://api.example.com/data",
+          "curl -O https://example.com/file.txt",
+          "curl -L https://short.url/redirect"
+        ],
+        "tags": ["téléchargement", "api"],
+        "niveau": "avance"
+      }
+    ],
+    "paquets": [
+      {
+        "nom": "apt update",
+        "description": "Met à jour la liste des paquets disponibles",
+        "commandes": ["apt update", "sudo apt update"],
+        "exemples": [
+          "sudo apt update"
+        ],
+        "tags": ["paquets", "mise-à-jour"],
+        "niveau": "intermediaire"
+      },
+      {
+        "nom": "apt upgrade",
+        "description": "Met à jour tous les paquets installés",
+        "commandes": ["apt upgrade", "apt full-upgrade"],
+        "exemples": [
+          "sudo apt upgrade",
+          "sudo apt full-upgrade"
+        ],
+        "tags": ["paquets", "mise-à-jour"],
+        "niveau": "intermediaire"
+      },
+      {
+        "nom": "apt install",
+        "description": "Installe un ou plusieurs paquets",
+        "commandes": ["apt install", "apt install -y"],
+        "exemples": [
+          "sudo apt install vim",
+          "sudo apt install -y htop curl git"
+        ],
+        "tags": ["paquets", "installation"],
+        "niveau": "intermediaire"
+      },
+      {
+        "nom": "apt remove",
+        "description": "Désinstalle un paquet",
+        "commandes": ["apt remove", "apt purge", "apt autoremove"],
+        "exemples": [
+          "sudo apt remove package_name",
+          "sudo apt purge package_name",
+          "sudo apt autoremove"
+        ],
+        "tags": ["paquets", "désinstallation"],
+        "niveau": "intermediaire"
+      }
+    ]
+  }
+}
