@@ -1,0 +1,56 @@
+nom: ping
+description: Teste la connectivité réseau vers une adresse
+commande: ping
+commande: ping -c
+exemple: ping google.com
+exemple: ping -c 4 192.168.1.1
+exemple: ping6 ipv6.google.com
+tags: connectivité, diagnostic
+
+nom: wget
+description: Télécharge des fichiers depuis internet
+commande: wget
+commande: wget -O
+exemple: wget https://example.com/file.txt
+exemple: wget -O nouveau_nom.txt https://example.com/file.txt
+exemple: wget -r --no-parent https://example.com/directory/
+tags: téléchargement, internet
+
+nom: curl
+description: Outil polyvalent pour transférer des données
+commande: curl
+commande: curl -O
+commande: curl -L
+exemple: curl https://api.example.com/data
+exemple: curl -O https://example.com/file.txt
+exemple: curl -L https://short.url/redirect
+tags: téléchargement, api, http
+
+nom: netstat
+description: Affiche les connexions réseau, tables de routage et statistiques
+commande: netstat -tuln
+commande: netstat -r
+commande: netstat -i
+exemple: netstat -tuln
+exemple: netstat -r
+exemple: netstat -i
+tags: connexions, ports, réseau
+
+nom: ss
+description: Version moderne de netstat pour examiner les sockets
+commande: ss -tuln
+commande: ss -p
+commande: ss -s
+exemple: ss -tuln
+exemple: ss -p
+exemple: ss -s
+tags: sockets, moderne, connexions
+
+nom: iptables
+description: Configure les règles de firewall
+commande: iptables -L
+commande: iptables -A
+exemple: sudo iptables -L
+exemple: sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+exemple: sudo iptables -A INPUT -j DROP
+tags: firewall, sécurité, avancé

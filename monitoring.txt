@@ -1,0 +1,54 @@
+nom: df
+description: Affiche l'utilisation de l'espace disque
+commande: df
+commande: df -h
+exemple: df -h
+exemple: df -i
+exemple: df /home
+tags: disque, espace, système
+
+nom: du
+description: Affiche la taille des dossiers
+commande: du
+commande: du -h
+commande: du -s
+exemple: du -h dossier/
+exemple: du -sh *
+exemple: du -h --max-depth=1
+tags: taille, dossiers
+
+nom: free
+description: Affiche l'utilisation de la mémoire
+commande: free
+commande: free -h
+exemple: free -h
+exemple: free -m
+tags: mémoire, ram, système
+
+nom: uptime
+description: Affiche le temps de fonctionnement du système
+commande: uptime
+exemple: uptime
+exemple: uptime -p
+tags: système, temps, charge
+
+nom: iotop
+description: Affiche l'utilisation I/O par processus
+commande: iotop
+exemple: sudo iotop
+exemple: sudo iotop -o
+tags: io, performances, disque
+
+nom: vmstat
+description: Affiche les statistiques de mémoire virtuelle
+commande: vmstat
+exemple: vmstat 1
+exemple: vmstat -s
+tags: mémoire, statistiques, système
+
+nom: iostat
+description: Affiche les statistiques d'entrée/sortie
+commande: iostat
+exemple: iostat -x 1
+exemple: iostat -d
+tags: io, performances, statistiques
