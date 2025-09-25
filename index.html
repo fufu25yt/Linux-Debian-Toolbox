@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boîte à Outils Linux Debian</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-color: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-color: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --sidebar-width: 280px;
+        }
+
+        [data-theme="dark"] {
+            --text-color: #f9fafb;
+            --text-secondary: #d1d5db;
+            --bg-color: #111827;
+            --bg-secondary: #1f2937;
+            --border-color: #374151;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle, .print-btn, .sidebar-toggle, .reload-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover, .print-btn:hover, .sidebar-toggle:hover, .reload-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-top: 80px;
+            padding: 1rem 2rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 80px;
+            z-index: 100;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.75rem;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 80px;
+            width: var(--sidebar-width);
+            height: calc(100vh - 80px);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+            z-index: 50;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .category-list {
+            padding: 1rem;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            gap: 0.75rem;
+        }
+
+        .category-item:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .category-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .category-icon {
+            font-size: 1.2rem;
+            min-width: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
+        }
+
+        .category-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .category-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Command Cards */
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .command-card {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .command-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .command-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        .command-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .command-examples {
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .example-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .command-card:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-secondary);
+        }
+
+        .loading i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            background: #fecaca;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        [data-theme="dark"] .error-message {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .sidebar {
+                width: 100%;
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .commands-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .search-container, .sidebar, .copy-btn {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            .command-card {
+                break-inside: avoid;
+                margin-bottom: 1rem;
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1><i class="fab fa-debian"></i> Boîte à Outils Linux Debian</h1>
+        <div class="header-controls">
+            <button class="reload-btn" onclick="reloadCommands()" title="Recharger les commandes">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="print-btn" onclick="printPage()">
+                <i class="fas fa-print"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Rechercher des commandes..." oninput="searchCommands(this.value)">
+        </div>
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="category-list" id="categoryList">
+            <!-- Categories will be loaded dynamically -->
+        </div>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner"></i>
+            <p>Chargement des commandes...</p>
+        </div>
+        <div id="content" style="display: none;">
+            <!-- Content will be loaded dynamically -->
+        </div>
+    </main>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            docsPath: 'docs/',
+            commandsFile: 'commands.json',
+            fallbackCommands: 'commands/'
+        };
+
+        // Global variables
+        let commands = {};
+        let categories = {};
+        let currentCategory = '';
+        let filteredCommands = {};
+        let sidebarCollapsed = false;
+
+        // Icons for categories
+        const categoryIcons = {
+            'debutant': 'fas fa-seedling',
+            'fichiers': 'fas fa-folder',
+            'processus': 'fas fa-cogs',
+            'reseau': 'fas fa-network-wired',
+            'permissions': 'fas fa-shield-alt',
+            'paquets': 'fas fa-box',
+            'archivage': 'fas fa-archive',
+            'monitoring': 'fas fa-chart-line',
+            'shell': 'fas fa-terminal',
+            'systeme': 'fas fa-server',
+            'admin': 'fas fa-user-shield',
+            'securite': 'fas fa-lock',
+            'services': 'fas fa-cog',
+            'base': 'fas fa-home'
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            loadCommands();
+        });
+
+        // Load commands from docs folder
+        async function loadCommands() {
+            try {
+                showLoading(true);
+                
+                // Try to load from JSON file first
+                try {
+                    const response = await fetch(`${CONFIG.docsPath}${CONFIG.commandsFile}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        commands = data.commands || {};
+                        categories = data.categories || {};
+                    } else {
+                        throw new Error('JSON file not found');
+                    }
+                } catch (error) {
+                    console.log('Loading from individual files...');
+                    await loadFromIndividualFiles();
+                }
+
+                if (Object.keys(commands).length === 0) {
+                    loadFallbackCommands();
+                }
+
+                buildInterface();
+                showLoading(false);
+                
+            } catch (error) {
+                console.error('Error loading commands:', error);
+                showError('Erreur lors du chargement des commandes. Utilisation des données par défaut.');
+                loadFallbackCommands();
+                buildInterface();
+                showLoading(false);
+            }
+        }
+
+        // Load commands from individual files
+        async function loadFromIndividualFiles() {
+            const fileList = [
+                'debutant.txt', 'fichiers.txt', 'processus.txt', 'reseau.txt',
+                'permissions.txt', 'paquets.txt', 'archivage.txt', 'monitoring.txt',
+                'shell.txt', 'systeme.txt', 'admin.txt', 'securite.txt', 'services.txt'
+            ];
+
+            for (const filename of fileList) {
+                try {
+                    const response = await fetch(`${CONFIG.docsPath}${filename}`);
+                    if (response.ok) {
+                        const text = await response.text();
+                        parseCommandFile(text, filename.replace('.txt', ''));
+                    }
+                } catch (error) {
+                    console.log(`File ${filename} not found`);
+                }
+            }
+        }
+
+        // Parse individual command file
+        function parseCommandFile(content, categoryName) {
+            const lines = content.split('\n').filter(line => line.trim());
+            let currentCommand = null;
+
+            if (!commands[categoryName]) {
+                commands[categoryName] = [];
+            }
+
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                
+                if (trimmedLine.startsWith('nom:')) {
+                    if (currentCommand) {
+                        commands[categoryName].push(currentCommand);
+                    }
+                    currentCommand = {
+                        nom: trimmedLine.substring(4).trim(),
+                        description: '',
+                        commandes: [],
+                        tags: []
+                    };
+                } else if (trimmedLine.startsWith('description:') && currentCommand) {
+                    currentCommand.description = trimmedLine.substring(12).trim();
+                } else if (trimmedLine.startsWith('commande:') && currentCommand) {
+                    currentCommand.commandes.push(trimmedLine.substring(9).trim());
+                } else if (trimmedLine.startsWith('tags:') && currentCommand) {
+                    currentCommand.tags = trimmedLine.substring(5).trim().split(',').map(tag => tag.trim());
+                } else if (trimmedLine.startsWith('exemple:') && currentCommand) {
+                    if (!currentCommand.exemples) currentCommand.exemples = [];
+                    currentCommand.exemples.push(trimmedLine.substring(8).trim());
+                }
+            }
+
+            if (currentCommand) {
+                commands[categoryName].push(currentCommand);
+            }
+        }
+
+        // Load fallback commands
+        function loadFallbackCommands() {
+            commands = {
+                'debutant': [
+                    {
+                        nom: 'ls',
+                        description: 'Liste les fichiers et dossiers du répertoire courant',
+                        commandes: ['ls', 'ls -la', 'ls -lh /home'],
+                        exemples: ['ls -la', 'ls -lh /home', 'ls --color=auto'],
+                        tags: ['navigation', 'fichiers', 'essentiel']
+                    },
+                    {
+                        nom: 'cd',
+                        description: 'Change de répertoire',
+                        commandes: ['cd', 'cd /path', 'cd ..', 'cd ~'],
+                        exemples: ['cd /home/user', 'cd ..', 'cd ~'],
+                        tags: ['navigation', 'essentiel']
+                    },
+                    {
+                        nom: 'pwd',
+                        description: 'Affiche le chemin du répertoire courant',
+                        commandes: ['pwd', 'pwd -P'],
+                        exemples: ['pwd', 'pwd -P'],
+                        tags: ['navigation', 'localisation']
+                    },
+                    {
+                        nom: 'mkdir',
+                        description: 'Crée un ou plusieurs répertoires',
+                        commandes: ['mkdir', 'mkdir -p', 'mkdir -m'],
+                        exemples: ['mkdir nouveau_dossier', 'mkdir -p dossier/sous-dossier', 'mkdir -m 755 dossier_avec_permissions'],
+                        tags: ['création', 'dossiers']
+                    }
+                ],
+                'fichiers': [
+                    {
+                        nom: 'cp',
+                        description: 'Copie fichiers et répertoires',
+                        commandes: ['cp', 'cp -r', 'cp -a'],
+                        exemples: ['cp fichier.txt copie.txt', 'cp -r dossier/ dossier_copie/', 'cp -a source/ destination/'],
+                        tags: ['copie', 'fichiers']
+                    },
+                    {
+                        nom: 'mv',
+                        description: 'Déplace ou renomme fichiers et répertoires',
+                        commandes: ['mv', 'mv source dest'],
+                        exemples: ['mv ancien.txt nouveau.txt', 'mv fichier.txt /autre/dossier/', 'mv *.txt documents/'],
+                        tags: ['déplacement', 'renommage']
+                    }
+                ]
+            };
+
+            categories = {
+                'debutant': {
+                    title: 'Débutant',
+                    description: 'Commandes essentielles pour commencer',
+                    icon: 'fas fa-seedling'
+                },
+                'fichiers': {
+                    title: 'Gestion Fichiers',
+                    description: 'Manipulation de fichiers et dossiers',
+                    icon: 'fas fa-folder'
+                }
+            };
+        }
+
+        // Build the interface
+        function buildInterface() {
+            buildSidebar();
+            buildContent();
+            
+            // Show first category by default
+            const firstCategory = Object.keys(commands)[0];
+            if (firstCategory) {
+                showCategory(firstCategory);
+            }
+        }
+
+        // Build sidebar
+        function buildSidebar() {
+            const categoryList = document.getElementById('categoryList');
+            categoryList.innerHTML = '';
+
+            for (const [categoryKey, categoryCommands] of Object.entries(commands)) {
+                const categoryInfo = categories[categoryKey] || {
+                    title: categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1),
+                    description: `Commandes ${categoryKey}`,
+                    icon: categoryIcons[categoryKey] || 'fas fa-folder'
+                };
+
+                const categoryItem = document.createElement('div');
+                categoryItem.className = 'category-item';
+                categoryItem.onclick = () => showCategory(categoryKey);
+                
+                categoryItem.innerHTML = `
+                    <i class="${categoryInfo.icon} category-icon"></i>
+                    <span>${categoryInfo.title}</span>
+                `;
+                
+                categoryList.appendChild(categoryItem);
+            }
+        }
+
+        // Build content sections
+        function buildContent() {
+            const content = document.getElementById('content');
+            content.innerHTML = '';
+
+            for (const [categoryKey, categoryCommands] of Object.entries(commands)) {
+                const categoryInfo = categories[categoryKey] || {
+                    title: categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1),
+                    description: `Commandes ${categoryKey}`
+                };
+
+                const section = document.createElement('section');
+                section.className = 'category-section';
+                section.id = categoryKey;
+                
+                section.innerHTML = `
+                    <div class="section-header">
+                        <h2 class="section-title">${categoryInfo.title}</h2>
+                        <p class="section-description">${categoryInfo.description}</p>
+                    </div>
+                    <div class="commands-grid">
+                        ${categoryCommands.map(command => createCommandCard(command)).join('')}
+                    </div>
+                `;
+                
+                content.appendChild(section);
+            }
+        }
+
+        // Create command card HTML
+        function createCommandCard(command) {
+            const examples = command.exemples || command.commandes || [];
+            const tags = command.tags || [];
+            
+            return `
+                <div class="command-card" data-command="${command.nom}" data-tags="${tags.join(' ')}">
+                    <button class="copy-btn" onclick="copyCommand('${command.nom}')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <div class="command-header">
+                        <h3 class="command-name">${command.nom}</h3>
+                    </div>
+                    <p class="command-description">${command.description}</p>
+                    ${examples.length > 0 ? `
+                        <div class="command-examples">
+                            <div class="example-title">Exemples d'usage :</div>
+                            ${examples.map(ex => `<div class="code-block">${ex}</div>`).join('')}
+                        </div>
+                    ` : ''}
+                    ${tags.length > 0 ? `
+                        <div class="tags">
+                            ${tags.map(tag => `<span class="tag" onclick="filterByTag('${tag}')">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Show category
+        function showCategory(categoryKey) {
+            // Update sidebar
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const activeItem = Array.from(document.querySelectorAll('.category-item')).find(item => 
+                item.onclick.toString().includes(categoryKey)
+            );
+            if (activeItem) activeItem.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.category-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const activeSection = document.getElementById(categoryKey);
+            if (activeSection) activeSection.classList.add('active');
+            
+            currentCategory = categoryKey;
+        }
+
+        // Search commands
+        function searchCommands(query) {
+            const searchTerm = query.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                // Show all commands
+                document.querySelectorAll('.command-card').forEach(card => {
+                    card.style.display = 'block';
+                });
+                return;
+            }
+
+            document.querySelectorAll('.command-card').forEach(card => {
+                const commandName = card.dataset.command.toLowerCase();
+                const commandText = card.textContent.toLowerCase();
+                
+                if (commandName.includes(searchTerm) || commandText.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Filter by tag
+        function filterByTag(tag) {
+            document.querySelectorAll('.command-card').forEach(card => {
+                const tags = card.dataset.tags.toLowerCase();
+                if (tags.includes(tag.toLowerCase())) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update search input
+            document.querySelector('.search-input').value = tag;
+        }
+
+        // Copy command to clipboard
+        async function copyCommand(commandName) {
+            try {
+                await navigator.clipboard.writeText(commandName);
+                
+                // Visual feedback
+                const button = event.target.closest('.copy-btn');
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                button.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.style.background = '';
+                }, 1000);
+                
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        }
+
+        // Toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebarCollapsed = !sidebarCollapsed;
+            
+            if (sidebarCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+            }
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle i');
+            
+            if (body.dataset.theme === 'dark') {
+                body.dataset.theme = 'light';
+                themeToggle.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.dataset.theme = 'dark';
+                themeToggle.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load theme from localStorage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const themeToggle = document.querySelector('.theme-toggle i');
+            
+            document.body.dataset.theme = savedTheme;
+            themeToggle.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Print page
+        function printPage() {
+            window.print();
+        }
+
+        // Reload commands
+        async function reloadCommands() {
+            const reloadBtn = document.querySelector('.reload-btn i');
+            reloadBtn.classList.add('fa-spin');
+            
+            try {
+                await loadCommands();
+            } finally {
+                reloadBtn.classList.remove('fa-spin');
+            }
+        }
+
+        // Show/hide loading
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            const content = document.getElementById('content');
+            
+            if (show) {
+                loading.style.display = 'block';
+                content.style.display = 'none';
+            } else {
+                loading.style.display = 'none';
+                content.style.display = 'block';
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            const content = document.getElementById('content');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            content.prepend(errorDiv);
+            
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+    </script>
+</body>
+</html>
